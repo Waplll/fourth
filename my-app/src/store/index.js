@@ -37,7 +37,12 @@ export default createStore({
       return instance
           .get('/products') // Запрос к эндпоинту /products
           .then(response => {
-            const products = response.data.data; // Данные находятся в поле "data"
+            const products = response.data.data.map(product => ({
+              ...product,
+              image: product.image && product.image.trim() !== ''
+                  ? `http://lifestealer86.ru/${product.image}` // Преобразуем относительный путь в абсолютный
+                  : 'https://via.placeholder.com/100' // Заглушка для отсутствующих изображений
+            }));
             commit('SET_PRODUCTS', products);
           })
           .catch(error => {
