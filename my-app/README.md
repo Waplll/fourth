@@ -1,19 +1,24 @@
 # my-app
 
-## Project setup
+## Перейдём в нужный каталог
 ```
-npm install
+cd my-app
 ```
 
-### Compiles and hot-reloads for development
+## Установка библиотеки
+```
+npm install axios
+```
+
+### Запуск сервера
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Запуск модификаций
 ```
 npm run build
 ```
 
-### Customize configuration
+### Кастомизация конфигурации
 See [Configuration Reference](https://cli.vuejs.org/config/).
