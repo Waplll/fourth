@@ -2,13 +2,11 @@
   <div id="app">
     <nav class="navbar">
       <h1>Просто купить</h1>
-      <div v-if="user" class="auth-actions">
-        <span>Добро пожаловать, {{ user.email }}!</span>
-        <button @click="logout">Выход</button>
-      </div>
-      <div v-else class="auth-actions">
-        <button @click="goToLogin">Войти</button>
-        <button @click="goToRegister">Регистрация</button>
+      <div class="auth-actions">
+        <button v-if="!user" @click="goToLogin">Войти</button>
+        <button v-if="!user" @click="goToRegister">Регистрация</button>
+        <button @click="goToCart">Корзина</button>
+        <button v-if="!user" @click="goToOrders">Мои заказы</button>
       </div>
     </nav>
     <router-view />
@@ -32,6 +30,12 @@ export default {
     },
     goToRegister() {
       this.$router.push('/register');
+    },
+    goToCart() {
+      this.$router.push('/cart');
+    },
+    goToOrders() {
+      this.$router.push('/orders');
     }
   }
 };
@@ -50,5 +54,34 @@ export default {
 .auth-actions {
   display: flex;
   gap: 10px;
+}
+
+.auth-actions button {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.auth-actions button:hover {
+  background-color: #35495e;
+}
+
+.auth-actions button.cart-button {
+  background-color: #f44336;
+}
+
+.auth-actions button.cart-button:hover {
+  background-color: #d32f2f;
+}
+
+.auth-actions button.orders-button {
+  background-color: #ff9800;
+}
+
+.auth-actions button.orders-button:hover {
+  background-color: #e68700;
 }
 </style>

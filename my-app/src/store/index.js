@@ -52,7 +52,8 @@ export default createStore({
         },
         SAVE_ORDER(state, order) {
             state.orders.push(order);
-        }
+        },
+
     },
     actions: {
         fetchProducts({ commit }) {
@@ -101,12 +102,13 @@ export default createStore({
                     id: item.id,
                     name: item.name,
                     price: item.price,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    image: item.image
                 }))
             };
-            commit('SAVE_ORDER', order); // Сохраняем заказ
-            commit('CLEAR_CART'); // Очищаем корзину
+            commit('SAVE_ORDER', order);
+            commit('CLEAR_CART');
             alert('Заказ успешно оформлен!');
-        },
+        }
     }
 });

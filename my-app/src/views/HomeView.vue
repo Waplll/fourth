@@ -24,7 +24,11 @@
     <!-- Индикатор загрузки -->
     <div v-if="loading" class="loading">Загрузка...</div>
 
+    <!-- Кнопка "Перейти в корзину" -->
     <button @click="goToCart">Перейти в корзину</button>
+
+    <!-- Кнопка "Мои заказы" -->
+    <button @click="goToOrders">Мои заказы</button>
   </div>
 </template>
 
@@ -47,6 +51,9 @@ export default {
     },
     goToCart() {
       this.$router.push('/cart');
+    },
+    goToOrders() {
+      this.$router.push('/orders');
     }
   },
   created() {
@@ -87,5 +94,19 @@ export default {
 .loading {
   font-style: italic;
   color: gray;
+}
+
+button {
+  background-color: #42b983;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #38a169;
 }
 </style>
