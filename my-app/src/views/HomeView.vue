@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       loading: true, // Флаг загрузки
-      error: null    // Сообщение об ошибке
+      error: null // Сообщение об ошибке
     };
   },
   methods: {

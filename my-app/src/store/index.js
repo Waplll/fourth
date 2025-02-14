@@ -1,8 +1,8 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 
-// Настройка Axios
-axios.defaults.baseURL = 'https://lifestealer86.ru/api-shop/';
+// Используем прокси для разработки
+axios.defaults.baseURL = '/api-shop';
 
 export default createStore({
   state: {
@@ -63,13 +63,19 @@ export default createStore({
     },
     fetchProducts({ commit }) {
       return axios
-          .get('/products') // Эндпоинт для получения товаров
+          .get('/products') // Теперь используем относительный путь
           .then(response => {
-            commit('SET_PRODUCTS', response.data); // Сохраняем товары в состоянии
+            commit('SET_PRODUCTS', response.data);
           })
           .catch(error => {
             console.error('Ошибка при загрузке товаров:', error);
-            throw error; // Передаем ошибку дальше
+            if (error.response) {
+              throw new Error(`Сервер вернул ошибку: ${error.response.status}`);
+            } else if (error.request) {
+              throw new Error('Не удалось связаться с сервером. Проверьте подключение.');
+            } else {
+              throw new Error('Произошла неизвестная ошибка. Попробуйте позже.');
+            }
           });
     }
   }
