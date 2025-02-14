@@ -2,7 +2,7 @@
   <form class="login" @submit.prevent="login">
     <h1>Signin</h1>
     <label>User name</label>
-    <input type="text" required v-model="username" /
+    <input type="text" required v-model="username" />
     <label>Password</label>
     <input type="password" required v-model="password" />
     <hr />
