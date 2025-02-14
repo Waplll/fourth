@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 
+// Настройка Axios
 axios.defaults.baseURL = 'https://lifestealer86.ru/api-shop/';
 
 export default createStore({
@@ -8,7 +9,7 @@ export default createStore({
     user: null,
     cart: [],
     orders: [],
-    products: []
+    products: [] // Список товаров
   },
   mutations: {
     SET_USER(state, user) {
@@ -24,10 +25,6 @@ export default createStore({
     },
     REMOVE_FROM_CART(state, productId) {
       state.cart = state.cart.filter(item => item.id !== productId);
-    },
-    UPDATE_QUANTITY(state, { id, quantity }) {
-      const item = state.cart.find(item => item.id === id);
-      if (item) item.quantity = quantity;
     },
     CLEAR_CART(state) {
       state.cart = [];
@@ -56,9 +53,6 @@ export default createStore({
     removeFromCart({ commit }, productId) {
       commit('REMOVE_FROM_CART', productId);
     },
-    updateQuantity({ commit }, payload) {
-      commit('UPDATE_QUANTITY', payload);
-    },
     clearCart({ commit }) {
       commit('CLEAR_CART');
     },
@@ -68,12 +62,14 @@ export default createStore({
       commit('CLEAR_CART');
     },
     fetchProducts({ commit }) {
-      axios.get('/products')
+      return axios
+          .get('/products') // Эндпоинт для получения товаров
           .then(response => {
-            commit('SET_PRODUCTS', response.data);
+            commit('SET_PRODUCTS', response.data); // Сохраняем товары в состоянии
           })
           .catch(error => {
             console.error('Ошибка при загрузке товаров:', error);
+            throw error; // Передаем ошибку дальше
           });
     }
   }
