@@ -11,12 +11,14 @@ const instance = axios.create({
   withCredentials: true
 });
 
+
 export default createStore({
   state: {
     user: null,
     cart: [],
     orders: [],
-    products: [], // Список товаров
+    products: [],
+    userToken: null,
     error: null, // Состояние для ошибок
     loading: false // Состояние загрузки
   },
@@ -29,9 +31,39 @@ export default createStore({
     },
     SET_LOADING(state, status) {
       state.loading = status;
+    },
+    SET_USER(state, user) {
+      state.user = user;
+    },
+    SET_USER_TOKEN(state, token) {
+      state.userToken = token;
     }
   },
   actions: {
+    register({ commit }, userData) {
+      return axios.post('/auth/signup', userData) // Запрос к эндпоинту /auth/signup
+          .then(response => {
+            const userToken = response.data.data.user_token; // Получаем токен из ответа
+            commit('SET_USER_TOKEN', userToken); // Сохраняем токен в состоянии
+            return response.data; // Возвращаем данные для дальнейшей обработки
+          })
+          .catch(error => {
+            console.error('Ошибка регистрации:', error);
+            throw new Error(error.response?.data?.message || 'Произошла ошибка при регистрации.');
+          });
+    },
+    login({ commit }, credentials) {
+      return axios.post('/auth/login', credentials) // Запрос к эндпоинту /auth/login
+          .then(response => {
+            const userToken = response.data.data.user_token; // Получаем токен из ответа
+            commit('SET_USER_TOKEN', userToken); // Сохраняем токен в состоянии
+            return response.data; // Возвращаем данные для дальнейшей обработки
+          })
+          .catch(error => {
+            console.error('Ошибка входа:', error);
+            throw new Error(error.response?.data?.message || 'Неверные учетные данные.');
+          });
+    },
     fetchProducts({ commit }) {
       commit('SET_LOADING', true); // Начинаем загрузку
       return instance
@@ -60,4 +92,5 @@ export default createStore({
           });
     }
   }
+
 });
