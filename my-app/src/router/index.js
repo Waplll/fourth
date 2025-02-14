@@ -1,69 +1,21 @@
-import { createStore } from 'vuex'
-import { loginRequest } from "@/utils/api";
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '@/views/HomeView.vue';
+import LoginView from '@/views/LoginView.vue';
+import RegisterView from '@/views/RegisterView.vue';
+import CartView from '@/views/CartView.vue';
+import OrdersView from '@/views/OrdersView.vue';
 
-export default createStore({
-  state: {
-    token: localStorage.getItem('myAppToken') || '',
-  },
-  getters: {
-    isAuthenticated: state => {}
-  },
-  actions: {
-    AUTH_REQUEST ({ commit }, user) {
-      return new Promise((resolve, reject) => {
-        loginRequest(user)
-            .then(response => {
-              commit('AUTH_REQUEST', response);
-              localStorage.setItem('myAppToken', token);
-              resolve()
-            })
-            .catch(error => {
-              commit('AUTH_REQUEST', error)
-              localStorage.removeItem('myAppToken');
-              reject
-            })
-      })
-    }
-  },
-  mutations: {
-    AUTH_REQUEST (state, token) {
-      state.token = token;
-    },
-    AUTH_ERROR (state) {
-      state.token = '';
-    }
-  },
-})
-const ifNotAuthenticated = (to, from, next) => {
-  if (!store.getters.isAuthenticated) {
-    next();
-    return;
-  }
-  next('/');
-};
-
-const ifAuthenticated = (to, from, next) => {
-  if (store.getters.isAuthenticated) {
-    next();
-    return;
-  }
-  next('/login');
-};
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: function () {
-      return import('../views/HomeView.vue');
-    },
-    beforeEnter: ifAuthenticated
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: function () {
-      return import('../components/Login.vue');
-    },
-    beforeEnter: ifNotAuthenticated
-  }
+  { path: '/', name: 'home', component: HomeView },
+  { path: '/login', name: 'login', component: LoginView },
+  { path: '/register', name: 'register', component: RegisterView },
+  { path: '/cart', name: 'cart', component: CartView },
+  { path: '/orders', name: 'orders', component: OrdersView }
 ];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+});
+
+export default router;
