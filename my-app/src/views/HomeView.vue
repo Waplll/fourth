@@ -8,12 +8,7 @@
     <!-- Список товаров -->
     <ul v-if="products.length">
       <li v-for="product in products" :key="product.id" class="product-item">
-        <img
-            :src="product.image"
-            :alt="product.name"
-            width="100"
-            height="100"
-        />
+        <img :src="product.image" :alt="product.name" width="100" height="100" />
         <div class="product-info">
           <h3>{{ product.name }}</h3>
           <p>{{ product.description }}</p>

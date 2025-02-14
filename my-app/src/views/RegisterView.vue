@@ -33,13 +33,13 @@ export default {
       const userData = { fio: this.fio, email: this.email, password: this.password };
 
       this.$store
-          .dispatch('register', userData) // Вызываем метод из Vuex
+          .dispatch('register', userData)
           .then(() => {
             alert('Регистрация успешна!');
-            this.$router.push('/login'); // Переходим на страницу входа
+            this.$router.push('/login');
           })
           .catch(err => {
-            this.error = err.message || 'Ошибка регистрации'; // Отображаем ошибку
+            this.error = err.message || 'Ошибка регистрации';
             console.error('Ошибка регистрации:', err);
           });
     },

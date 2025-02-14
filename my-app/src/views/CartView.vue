@@ -1,13 +1,32 @@
 <template>
   <div class="cart">
     <h1>Корзина</h1>
-    <ul>
-      <li v-for="item in cart" :key="item.id">
-        {{ item.name }} x {{ item.quantity }} = ${{ item.price * item.quantity }}
-        <button @click="removeFromCart(item.id)">Удалить</button>
+
+    <!-- Сообщение, если корзина пуста -->
+    <p v-if="!cart.length">Ваша корзина пуста.</p>
+
+    <!-- Список товаров в корзине -->
+    <ul v-else>
+      <li v-for="item in cart" :key="item.id" class="cart-item">
+        <img :src="item.image" :alt="item.name" width="50" height="50" />
+        <div class="item-info">
+          <h3>{{ item.name }}</h3>
+          <p><strong>Цена:</strong> ${{ item.price.toFixed(2) }}</p>
+          <p><strong>Количество:</strong></p>
+          <button @click="decreaseQuantity(item.id)">-</button>
+          <span>{{ item.quantity }}</span>
+          <button @click="increaseQuantity(item.id)">+</button>
+          <button @click="removeFromCart(item.id)">Удалить</button>
+        </div>
       </li>
     </ul>
-    <button @click="checkout" v-if="cart.length > 0">Оформить заказ</button>
+
+    <!-- Итоговая сумма -->
+    <div v-if="cart.length" class="total">
+      <h3>Итого: ${{ total.toFixed(2) }}</h3>
+      <button @click="checkout">Оформить заказ</button>
+    </div>
+
     <button @click="goBack">Назад</button>
   </div>
 </template>
@@ -17,15 +36,32 @@ export default {
   computed: {
     cart() {
       return this.$store.state.cart;
+    },
+    total() {
+      return this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     }
   },
   methods: {
+    increaseQuantity(id) {
+      this.$store.dispatch('updateQuantity', { id, quantity: this.cart.find(item => item.id === id).quantity + 1 });
+    },
+    decreaseQuantity(id) {
+      this.$store.dispatch('updateQuantity', { id, quantity: this.cart.find(item => item.id === id).quantity - 1 });
+    },
     removeFromCart(id) {
       this.$store.dispatch('removeFromCart', id);
     },
     checkout() {
-      this.$store.dispatch('addOrder');
-      this.$router.push('/orders');
+      this.$store
+          .dispatch('checkout')
+          .then(() => {
+            alert('Заказ успешно оформлен!');
+            this.$router.push('/orders');
+          })
+          .catch(err => {
+            alert(err.message || 'Произошла ошибка при оформлении заказа.');
+            console.error('Ошибка при оформлении заказа:', err);
+          });
     },
     goBack() {
       this.$router.push('/');
@@ -33,3 +69,36 @@ export default {
   }
 };
 </script>
+
+<style>
+.cart {
+  padding: 20px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.cart-item img {
+  margin-right: 15px;
+  border-radius: 5px;
+}
+
+.item-info {
+  flex-grow: 1;
+}
+
+.total {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.total button {
+  margin-top: 10px;
+}
+</style>
