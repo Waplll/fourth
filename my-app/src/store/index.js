@@ -14,12 +14,11 @@ const instance = axios.create({
 export default createStore({
     state: {
         user: null,
-        cart: [], // Состояние корзины
+        cart: [],
         orders: [],
         products: [],
         error: null,
-        loading: false,
-        userToken: null
+        loading: false
     },
     mutations: {
         SET_PRODUCTS(state, products) {
@@ -57,15 +56,15 @@ export default createStore({
     },
     actions: {
         fetchProducts({ commit }) {
-            commit('SET_LOADING', true); // Начинаем загрузку
+            commit('SET_LOADING', true);
             return instance
-                .get('/products') // Запрос к эндпоинту /products
+                .get('/products')
                 .then(response => {
                     const products = response.data.data.map(product => ({
                         ...product,
                         image: product.image && product.image.trim() !== ''
-                            ? `http://lifestealer86.ru/${product.image}` // Преобразуем относительный путь в абсолютный
-                            : 'https://via.placeholder.com/100' // Заглушка для отсутствующих изображений
+                            ? `http://lifestealer86.ru/${product.image}`
+                            : 'https://via.placeholder.com/100'
                     }));
                     commit('SET_PRODUCTS', products);
                 })
@@ -80,7 +79,7 @@ export default createStore({
                     commit('SET_ERROR', errorMessage);
                 })
                 .finally(() => {
-                    commit('SET_LOADING', false); // Завершаем загрузку
+                    commit('SET_LOADING', false);
                 });
         },
         addToCart({ commit }, product) {
@@ -96,32 +95,18 @@ export default createStore({
             commit('CLEAR_CART');
         },
         checkout({ commit, state }) {
-            return instance.post('/auth/order', {
+            const order = {
+                date: new Date().toISOString(),
                 items: state.cart.map(item => ({
                     id: item.id,
                     name: item.name,
                     price: item.price,
                     quantity: item.quantity
                 }))
-            })
-                .then(response => {
-                    const order = {
-                        date: new Date().toISOString(),
-                        items: state.cart.map(item => ({
-                            id: item.id,
-                            name: item.name,
-                            price: item.price,
-                            quantity: item.quantity
-                        }))
-                    };
-                    commit('SAVE_ORDER', order); // Сохраняем заказ
-                    commit('CLEAR_CART'); // Очищаем корзину
-                    return response.data;
-                })
-                .catch(error => {
-                    console.error('Ошибка при оформлении заказа:', error);
-                    throw new Error(error.response?.data?.message || 'Произошла ошибка при оформлении заказа.');
-                });
+            };
+            commit('SAVE_ORDER', order); // Сохраняем заказ
+            commit('CLEAR_CART'); // Очищаем корзину
+            alert('Заказ успешно оформлен!');
         },
     }
 });

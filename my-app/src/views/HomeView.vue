@@ -23,6 +23,8 @@
 
     <!-- Индикатор загрузки -->
     <div v-if="loading" class="loading">Загрузка...</div>
+
+    <button @click="goToCart">Перейти в корзину</button>
   </div>
 </template>
 
@@ -42,6 +44,9 @@ export default {
   methods: {
     addToCart(product) {
       this.$store.dispatch('addToCart', product);
+    },
+    goToCart() {
+      this.$router.push('/cart');
     }
   },
   created() {

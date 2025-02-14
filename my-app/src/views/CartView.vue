@@ -52,16 +52,7 @@ export default {
       this.$store.dispatch('removeFromCart', id);
     },
     checkout() {
-      this.$store
-          .dispatch('checkout')
-          .then(() => {
-            alert('Заказ успешно оформлен!');
-            this.$router.push('/orders');
-          })
-          .catch(err => {
-            alert(err.message || 'Произошла ошибка при оформлении заказа.');
-            console.error('Ошибка при оформлении заказа:', err);
-          });
+      this.$store.dispatch('checkout'); // Вызываем метод оформления заказа
     },
     goBack() {
       this.$router.push('/');
