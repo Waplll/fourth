@@ -13,10 +13,12 @@
           <h3>{{ item.name }}</h3>
           <p><strong>Цена:</strong> ${{ item.price.toFixed(2) }}</p>
           <p><strong>Количество:</strong></p>
+          <div class="navigation">
           <button @click="decreaseQuantity(item.id)">-</button>
           <span>{{ item.quantity }}</span>
           <button @click="increaseQuantity(item.id)">+</button>
           <button @click="removeFromCart(item.id)">Удалить</button>
+          </div>
         </div>
       </li>
     </ul>
@@ -100,4 +102,11 @@ export default {
 .total button {
   margin-top: 10px;
 }
+
+.navigation{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 </style>
