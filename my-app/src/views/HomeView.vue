@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Каталог товаров</h1>
+    <h1 class="page-title">Каталог товаров</h1>
 
     <!-- Отображение сообщения об ошибке -->
     <p v-if="error" class="error">{{ error }}</p>
@@ -24,11 +24,9 @@
     <!-- Индикатор загрузки -->
     <div v-if="loading" class="loading">Загрузка...</div>
 
-    <!-- Кнопка "Перейти в корзину" -->
+    <!-- Кнопки -->
     <button @click="goToCart">Перейти в корзину</button>
-
-    <!-- Кнопка "Мои заказы" -->
-    <button @click="goToOrders">Мои заказы</button>
+    <button @click="goToOrders" v-if="user">Мои заказы</button>
   </div>
 </template>
 
@@ -43,6 +41,9 @@ export default {
     },
     loading() {
       return this.$store.state.loading;
+    },
+    user() {
+      return this.$store.state.user;
     }
   },
   methods: {
@@ -66,6 +67,11 @@ export default {
 <style>
 .home {
   padding: 20px;
+  margin-top: 70px; /* Добавляем отступ сверху, чтобы контент не перекрывался шапкой */
+}
+
+.page-title {
+  margin-top: 0; /* Убираем верхний отступ у заголовка */
 }
 
 .product-item {
