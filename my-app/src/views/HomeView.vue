@@ -1,46 +1,20 @@
 <template>
   <div class="home">
-    <h1 class="page-title">Каталог товаров</h1>
-
-    <!-- Отображение сообщения об ошибке -->
-    <p v-if="error" class="error">{{ error }}</p>
-
-    <!-- Список товаров -->
-    <ul v-if="products.length">
-      <li v-for="product in products" :key="product.id" class="product-item">
-        <img :src="product.image" :alt="product.name" width="100" height="100" />
-        <div class="product-info">
-          <h3>{{ product.name }}</h3>
-          <p>{{ product.description }}</p>
-          <p><strong>Цена:</strong> ${{ product.price.toFixed(2) }}</p>
-          <button @click="addToCart(product)">Добавить в корзину</button>
-        </div>
-      </li>
-    </ul>
-
-    <!-- Сообщение, если товаров нет -->
-    <p v-else-if="!loading">Товары отсутствуют.</p>
-
-    <!-- Индикатор загрузки -->
-    <div v-if="loading" class="loading">Загрузка...</div>
-
-    <!-- Кнопки -->
+    <h1>Каталог товаров</h1>
+    <ProductList :products="products" @add-to-cart="addToCart" />
     <button @click="goToCart">Перейти в корзину</button>
     <button @click="goToOrders" v-if="user">Мои заказы</button>
   </div>
 </template>
 
 <script>
+import ProductList from '@/components/ProductList.vue';
+
 export default {
+  components: { ProductList },
   computed: {
     products() {
       return this.$store.state.products;
-    },
-    error() {
-      return this.$store.state.error;
-    },
-    loading() {
-      return this.$store.state.loading;
     },
     user() {
       return this.$store.state.user;
@@ -58,61 +32,7 @@ export default {
     }
   },
   created() {
-    this.$store.commit('SET_ERROR', null); // Очистка предыдущих ошибок
     this.$store.dispatch('fetchProducts');
   }
 };
 </script>
-
-<style>
-.home {
-  padding: 20px;
-  margin-top: 70px; /* Добавляем отступ сверху, чтобы контент не перекрывался шапкой */
-}
-
-.page-title {
-  margin-top: 0; /* Убираем верхний отступ у заголовка */
-}
-
-.product-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.product-item img {
-  margin-right: 15px;
-  border-radius: 5px;
-}
-
-.product-info {
-  flex-grow: 1;
-}
-
-.error {
-  color: red;
-  font-weight: bold;
-}
-
-.loading {
-  font-style: italic;
-  color: gray;
-}
-
-button {
-  background-color: #42b983;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-button:hover {
-  background-color: #38a169;
-}
-</style>
