@@ -1,13 +1,14 @@
 <template>
   <div id="app">
     <nav class="navbar sticky-navbar">
-      <h1 @click="goToHome" class="site-title">Просто купить</h1>
+      <h1 @click="goToMain" class="site-title">Просто купить</h1>
+
       <div class="auth-actions">
         <button v-if="!user" @click="goToLogin">Войти</button>
         <button v-if="!user" @click="goToRegister">Регистрация</button>
         <button @click="goToCart" class="cart-button">Корзина</button>
         <button v-if="!user" @click="goToOrders" class="orders-button">Мои заказы</button>
-        <!-- Приветствие и кнопка выхода для авторизованных пользователей -->
+
         <span v-if="user">Добро пожаловать, {{ user.email }}!</span>
         <button v-if="user" @click="logout">Выход</button>
       </div>
@@ -26,7 +27,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('logout');
-      this.$router.push('/');
+      this.$router.push('/main');
     },
     goToLogin() {
       this.$router.push('/login');
@@ -40,8 +41,8 @@ export default {
     goToOrders() {
       this.$router.push('/orders');
     },
-    goToHome() {
-      this.$router.push('/');
+    goToMain() {
+      this.$router.push('/main');
     }
   }
 };
@@ -88,6 +89,7 @@ export default {
   color: white;
   border: none;
   padding: 5px 10px;
+  font-size: 14px;
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s ease;
